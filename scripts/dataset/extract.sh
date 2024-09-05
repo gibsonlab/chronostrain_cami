@@ -1,0 +1,89 @@
+#!/bin/bash
+
+
+deinterleave_fastq() {
+  fastq_file=$1
+  fwd_file=$2
+  rev_file=$3
+
+  # https://www.biostars.org/p/141256/
+  paste - - - - - - - - < "${fastq_file}" \
+    | tee >(cut -f 1-4 | tr "\t" "\n" > ${fwd_file}) \
+    | cut -f 5-8 | tr "\t" "\n" > ${rev_file}
+}
+
+
+deinterleave_fastq_gz() {
+  fq_gz_file=$1
+  fwd_gz_file=$2
+  rev_gz_file=$3
+
+  # define and create temporary dir.
+  work_dir=$(dirname "$fwd_gz_file")
+  work_dir=$work_dir/__deinterleave_tmp
+  mkdir -p $work_dir
+
+  # contents of temporary dir
+  fq_file_tmp=$work_dir/__reads.fq
+  fwd_tmp=$work_dir/__1.fq
+  rev_tmp=$work_dir/__2.fq
+
+  # decompress.
+  pigz -dck $fq_gz_file > $fq_file_tmp
+
+  # invoke deinterleave into temporary outputs.
+  deinterleave_fastq $fq_file_tmp $fwd_tmp $rev_tmp
+
+  # now compress, and clean up.
+  pigz -c $fwd_tmp > $fwd_gz_file
+  pigz -c $rev_tmp > $rev_gz_file
+  rm -rf $work_dir
+}
+
+
+TARBALLS_DIR=/mnt/e/CAMI_strain_madness/reads/tarballs
+READS_DIR=/mnt/e/CAMI_strain_madness/reads/extracted
+
+
+for i in $(seq 0 99); do
+  # Check if archive exists.
+  tar_file="${TARBALLS_DIR}/strmgCAMI2_sample_${i}_reads.tar.gz"
+  if [ ! -f ${tar_file} ]; then
+    echo "Couldn't find tarball ${tar_file}. Skipping."
+    continue
+  fi
+
+  # First, extract the tarball to a temporary location.
+  echo "[!] Extracting ${i}..."
+  tmp_dir=${READS_DIR}/__untar_tmp
+  mkdir -p ${tmp_dir}
+  if tar -xvzf "${tar_file}" -C "${tmp_dir}"; then
+    echo "[! SUCCESS] Successfully extracted tarball for sample ${i}."
+  else
+    echo "[! ERROR] Failure in tarball for sample ${i}. Re-run download script to try again."
+#    rm "${tar_file}"
+    continue
+  fi
+
+  # next, deinterleave the fastq content.
+  echo "[!] Deinterleaving ${i}..."
+  expected_fq_gz=$(find ${tmp_dir}/short_read -name anonymous_reads.fq.gz)
+  if [ ! -f ${expected_fq_gz} ]; then
+    echo "[! ERROR] Couldn't find proper fq.gz file from extracted contents of sample ${i}."
+    break
+  fi
+
+  target_dir="${READS_DIR}/sample_${i}"
+  target_fwd="${target_dir}/1.fq.gz"
+  target_rev="${target_dir}/2.fq.gz"
+  mkdir -p ${target_dir}
+  deinterleave_fastq_gz "${expected_fq_gz}" "${target_fwd}" "${target_rev}"
+
+  # finally, clean up.
+  echo "[!] Cleaning up..."
+  rm -rf "$tmp_dir"
+
+  # DEBUGGING
+  echo "STOP HERE; debugging code."
+  exit 1
+done
