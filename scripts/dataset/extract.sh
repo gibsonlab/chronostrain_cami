@@ -46,10 +46,21 @@ READS_DIR=/mnt/e/CAMI_strain_madness/reads/extracted
 
 
 for i in $(seq 0 99); do
+  # Target files.
+  target_dir="${READS_DIR}/sample_${i}"
+  target_fwd="${target_dir}/1.fq.gz"
+  target_rev="${target_dir}/2.fq.gz"
+
+  # Check if targets already exist (done in a previous run.)
+  if [ -f "${target_fwd}" ]; then
+    echo "[! SUCCESS] Sample ${i} already extracted. Skipping."
+    continue
+  fi
+
   # Check if archive exists.
-  tar_file="${TARBALLS_DIR}/strmgCAMI2_sample_${i}_reads.tar.gz"
+  tar_file="${TARBALLS_DIR}/sample_${i}_reads.tar.gz"
   if [ ! -f ${tar_file} ]; then
-    echo "Couldn't find tarball ${tar_file}. Skipping."
+    echo "[! ERROR] Couldn't find tarball ${tar_file}. Skipping."
     continue
   fi
 
@@ -60,30 +71,22 @@ for i in $(seq 0 99); do
   if tar -xvzf "${tar_file}" -C "${tmp_dir}"; then
     echo "[! SUCCESS] Successfully extracted tarball for sample ${i}."
   else
-    echo "[! ERROR] Failure in tarball for sample ${i}. Re-run download script to try again."
-#    rm "${tar_file}"
+    echo "[! ERROR] Tarball for sample ${i} is not valid. Re-run download script to try again."
+    rm "${tar_file}"
     continue
   fi
 
   # next, deinterleave the fastq content.
   echo "[!] Deinterleaving ${i}..."
   expected_fq_gz=$(find ${tmp_dir}/short_read -name anonymous_reads.fq.gz)
-  if [ ! -f ${expected_fq_gz} ]; then
+  if [ ! -f "${expected_fq_gz}" ]; then
     echo "[! ERROR] Couldn't find proper fq.gz file from extracted contents of sample ${i}."
     break
   fi
-
-  target_dir="${READS_DIR}/sample_${i}"
-  target_fwd="${target_dir}/1.fq.gz"
-  target_rev="${target_dir}/2.fq.gz"
-  mkdir -p ${target_dir}
+  mkdir -p "${target_dir}"
   deinterleave_fastq_gz "${expected_fq_gz}" "${target_fwd}" "${target_rev}"
 
   # finally, clean up.
   echo "[!] Cleaning up..."
   rm -rf "$tmp_dir"
-
-  # DEBUGGING
-  echo "STOP HERE; debugging code."
-  exit 1
 done
