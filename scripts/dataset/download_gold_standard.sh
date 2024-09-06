@@ -15,9 +15,7 @@ tar -xvzf "${GOLD_STANDARD_GZ}" -C "${seq_dir}"
 
 
 # Step 3. Build the index.
-index_file=${GOLD_STANDARD_DIR}/index.tsv
-
-echo -e "Genus\tSpecies\tStrain\tAccession\tAssembly\tSeqPath\tChromosomeLen\tGFF" > "${index_file}"
+echo -e "Genus\tSpecies\tStrain\tAccession\tAssembly\tSeqPath\tChromosomeLen\tGFF" > "${GOLD_STANDARD_INDEX}"
 for fasta_path in ${seq_dir}/short_read/source_genomes/*.fasta; do
   # Build the index, row by row.
   fasta_file=$(basename ${fasta_path})
@@ -25,7 +23,7 @@ for fasta_path in ${seq_dir}/short_read/source_genomes/*.fasta; do
 
   asm_name="${fasta_file%%.*}"
   mv "${fasta_path}" "${seq_dir}"
-  echo -e "Unknown\tUnknown\t${asm_name}\t${asm_name}\t${asm_name}\t${seq_dir}/${fasta_file}.gz\t0\t" >> "${index_file}"
+  echo -e "Unknown\tUnknown\t${asm_name}\t${asm_name}\t${asm_name}\t${seq_dir}/${fasta_file}.gz\t0\t" >> "${GOLD_STANDARD_INDEX}"
 done
 
 # Clean up.
