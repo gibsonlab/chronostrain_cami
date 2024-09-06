@@ -87,6 +87,7 @@ for i in $(seq ${from_incl} ${to_incl}); do
   else
     echo "[! ERROR] Tarball for sample ${i} is not valid. Re-run download script to try again."
     #rm "${tar_file}"
+    rm -rf "${tmp_dir}"
     continue
   fi
 
