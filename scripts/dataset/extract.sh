@@ -1,4 +1,17 @@
 #!/bin/bash
+set -e
+
+from_incl=$1
+to_incl=$2
+if [ -z "$from_incl" ]; then
+  from_incl=0
+fi
+if [ -z "$to_incl" ]; then
+  to_incl=99
+fi
+
+echo "Extracting samples from ${from_incl} to ${to_incl} inclusive."
+
 
 
 deinterleave_fastq() {
@@ -41,13 +54,13 @@ deinterleave_fastq_gz() {
 }
 
 
-TARBALLS_DIR=/mnt/e/CAMI_strain_madness/reads/tarballs
-READS_DIR=/mnt/e/CAMI_strain_madness/reads/extracted
+tarballs_dir=${DATA_DIR}/reads/tarballs
+extract_dir=${DATA_DIR}/reads/extracted
 
 
-for i in $(seq 0 99); do
+for i in $(seq ${from_incl} ${to_incl}); do
   # Target files.
-  target_dir="${READS_DIR}/sample_${i}"
+  target_dir="${extract_dir}/sample_${i}"
   target_fwd="${target_dir}/1.fq.gz"
   target_rev="${target_dir}/2.fq.gz"
 
@@ -58,7 +71,7 @@ for i in $(seq 0 99); do
   fi
 
   # Check if archive exists.
-  tar_file="${TARBALLS_DIR}/sample_${i}_reads.tar.gz"
+  tar_file="${tarballs_dir}/sample_${i}_reads.tar.gz"
   if [ ! -f ${tar_file} ]; then
     echo "[! ERROR] Couldn't find tarball ${tar_file}. Skipping."
     continue
@@ -66,7 +79,7 @@ for i in $(seq 0 99); do
 
   # First, extract the tarball to a temporary location.
   echo "[!] Extracting ${i}..."
-  tmp_dir=${READS_DIR}/__untar_tmp
+  tmp_dir=${extract_dir}/__untar_tmp
   mkdir -p ${tmp_dir}
   if tar -xvzf "${tar_file}" -C "${tmp_dir}"; then
     echo "[! SUCCESS] Successfully extracted tarball for sample ${i}."
