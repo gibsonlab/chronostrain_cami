@@ -16,7 +16,7 @@ for fasta_path in ${GOLD_STANDARD_DIR}/sequences/*.fasta.gz; do
   kmer_file="${kmer_dir}/${asm_name}.hdf5"
   if [ ! -f "${kmer_file}" ]; then
     echo "[!] Kmerizing: ${fasta_file}"
-    straingst kmerize -o "${kmer_file}" "${fasta_file}"
+    straingst kmerize -o "${kmer_file}" "${fasta_path}"
   fi
 
   echo "[!] Adding ${kmer_file} to listing."
