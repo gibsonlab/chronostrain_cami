@@ -26,15 +26,12 @@ pipeline_single_sample() {
     echo "[!] Filtering for ${sample_id} already done."
   else
     # Prepare input files and directories
-    mkdir -p "${outdir}"
-    mkdir -p "${logdir}"
     fq1="${DATA_DIR}/reads/extracted/sample_${sample_id}/1.fq.gz"
     fq2="${DATA_DIR}/reads/extracted/sample_${sample_id}/2.fq.gz"
     if [ ! -f "${fq1}" ] || [ ! -f "${fq2}" ]; then
       echo "[! Error] Read input files 1.fq.gz and/or 2.fq.gz not found."
       exit 1
     fi
-
     n_fwd=$(num_fastq_reads "$fq1")
     n_rev=$(num_fastq_reads "$fq2")
     if [ "${n_fwd}" -ne "${n_rev}" ]; then
@@ -42,6 +39,8 @@ pipeline_single_sample() {
       exit 1
     fi
 
+    mkdir -p "${outdir}"
+    mkdir -p "${logdir}"
     reads_csv="${outdir}/reads.csv"
     echo "${DEFAULT_T},SAMPLE_${sample_id},${n_fwd},${fq1},paired_1,fastq" > "${reads_csv}"
     echo "${DEFAULT_T},SAMPLE_${sample_id},${n_rev},${fq2},paired_2,fastq" >> "${reads_csv}"
