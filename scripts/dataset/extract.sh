@@ -92,8 +92,8 @@ for i in $(seq ${from_incl} ${to_incl}); do
 
   # next, deinterleave the fastq content.
   echo "[!] Deinterleaving ${i}..."
-  expected_fq_gz=$(find ${tmp_dir}/short_read -name anonymous_reads.fq.gz | head 1)
-  expected_mapping=$(find ${tmp_dir}/short_read -name reads_mapping.tsv.gz | head 1)
+  expected_fq_gz=$(find ${tmp_dir}/short_read -name anonymous_reads.fq.gz | head -n 1)
+  expected_mapping=$(find ${tmp_dir}/short_read -name reads_mapping.tsv.gz | head -n 1)
   if [ ! -f "${expected_fq_gz}" ]; then
     echo "[! ERROR] Couldn't find proper fq.gz file from extracted contents of sample ${i}."
     break
