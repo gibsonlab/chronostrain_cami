@@ -9,7 +9,7 @@ mkdir -p "${kmer_dir}"
 strainge_gold_standard_listing="${STRAINGE_DB_DIR}/gold_standard_references.txt"
 > "${strainge_gold_standard_listing}"
 
-for fasta_path in ${GOLD_STANDARD_DIR}/*.fasta.gz; do
+for fasta_path in ${GOLD_STANDARD_DIR}/sequences/*.fasta.gz; do
   fasta_file=$(basename "${fasta_path}")
   asm_name="${fasta_file%.fasta.gz}"
 
