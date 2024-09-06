@@ -18,7 +18,6 @@ BLAST_DB_NAME="CAMI_Strain_Madness_Gold"  # Blast DB to create.
 # chronostrain-specific settings
 NUM_CORES=8  # number of cores to use (e.g. for blastn)
 MARKER_MIN_PCT_IDTY=75  # accept BLAST hits as markers above this threshold
-CHRONOSTRAIN_TARGET_JSON="${CHRONOSTRAIN_DB_DIR}/gold_standard_only.json"
 
 # Some checks.
 if [ ! -f "${GOLD_STANDARD_INDEX}" ]; then echo "Couldn't find ${GOLD_STANDARD_INDEX}"; fi
@@ -38,5 +37,5 @@ env \
       -r "$GOLD_STANDARD_INDEX" \
       -b $BLAST_DB_NAME -bd "$BLAST_DB_DIR" \
       --min-pct-idty "$MARKER_MIN_PCT_IDTY" \
-      -o "$CHRONOSTRAIN_TARGET_JSON" \
+      -o "$CHRONOSTRAIN_GOLD_STANDARD_JSON" \
       --threads "$NUM_CORES"

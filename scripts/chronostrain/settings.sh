@@ -2,7 +2,7 @@
 export CHRONOSTRAIN_DB_DIR="${DATA_DIR}/inference/databases/chronostrain/ecoli"
 export CHRONOSTRAIN_GOLD_STANDARD_JSON="${CHRONOSTRAIN_DB_DIR}/gold_standard_only.json"
 export CHRONOSTRAIN_ALL_JSON="${CHRONOSTRAIN_DB_DIR}/all.json"
-export CHRONOSTRAIN_REF_ONLY_JSON="/mnt/e/"
+export CHRONOSTRAIN_REF_ONLY_JSON="/mnt/e/ecoli_db/chronostrain_files/ecoli.json"
 
 
 # ========= Chronostrain settings
