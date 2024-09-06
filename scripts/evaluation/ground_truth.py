@@ -1,21 +1,17 @@
 from dataclasses import dataclass
-from typing import List, Dict, Iterator, Tuple
+from typing import List, Iterator, Tuple
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
+from .base import StrainAbundanceProfile
 
 
 @dataclass
 class SpeciesLabel:
     genus: str
     species: str
-
-
-class StrainAbundanceProfile(object):
-    def __init__(self, abundance_ratios: np.ndarray, strain_ids: List[str]):
-        self.abundance_ratios = abundance_ratios
-        self.strain_ids = strain_ids
 
 
 def profile_split_by_sample(profile_path: Path) -> Iterator[List[str]]:
