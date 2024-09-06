@@ -8,7 +8,7 @@ from collections import Counter
 
 from chronostrain.inference import GaussianWithGlobalZerosPosteriorDense
 from chronostrain.config import cfg
-from .base import StrainAbundanceProfile
+from base import StrainAbundanceProfile
 
 
 class ChronoStrainInferenceResult:
