@@ -23,5 +23,5 @@ for fasta_path in ${GOLD_STANDARD_DIR}/sequences/*.fasta.gz; do
   echo "${kmer_file}" >> "${strainge_gold_standard_listing}"
 done
 
-
+echo "[!] Creating pan-genome kmer database filed."
 straingst createdb -o "${STRAINGE_GOLD_STANDARD_ONLY_DB}" -f "${strainge_gold_standard_listing}"

@@ -34,13 +34,13 @@ pipeline_single_sample() {
     fq1="${DATA_DIR}/reads/extracted/sample_${sample_id}/1.fq.gz"
     fq2="${DATA_DIR}/reads/extracted/sample_${sample_id}/2.fq.gz"
     if [ ! -f "${fq1}" ] || [ ! -f "${fq2}" ]; then
-      echo "[! Error] Read input files 1.fq.gz and/or 2.fq.gz not found."
-      exit 1
+      echo "[! Error] Read input files 1.fq.gz and/or 2.fq.gz not found. Skipping sample ${sample_id}"
+      return
     fi
     n_fwd=$(num_fastq_reads "$fq1")
     n_rev=$(num_fastq_reads "$fq2")
     if [ "${n_fwd}" -ne "${n_rev}" ]; then
-      echo "[! Error] Sample ${sample_id} forward reads (${n_fwd}) don't match reverse reads (${n_rev})."
+      echo "[! Error] Sample ${sample_id} forward reads (N=${n_fwd}) doesn't match reverse reads (N=${n_rev})."
       exit 1
     fi
 
