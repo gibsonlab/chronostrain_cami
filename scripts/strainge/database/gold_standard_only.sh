@@ -1,6 +1,6 @@
 #!/bin/bash
 source settings_global.sh
-soure strainge/settings.sh
+source strainge/settings.sh
 set -e
 
 kmer_dir="${STRAINGE_DB_DIR}/kmers"
