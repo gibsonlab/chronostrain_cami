@@ -1,6 +1,7 @@
 #!/bin/bash
 source settings_global.sh
 source chronostrain/inference/settings.sh
+set -e
 
 
 num_fastq_reads() {
