@@ -21,9 +21,11 @@ echo -e "Genus\tSpecies\tStrain\tAccession\tAssembly\tSeqPath\tChromosomeLen\tGF
 for fasta_path in ${seq_dir}/short_read/source_genomes/*.fasta; do
   # Build the index, row by row.
   fasta_file=$(basename ${fasta_path})
+  pigz $fasta_path
+
   asm_name="${fasta_file%%.*}"
   mv "${fasta_path}" "${seq_dir}"
-  echo -e "Unknown\tUnknown\t${asm_name}\t${asm_name}\t${asm_name}\t${seq_dir}/${fasta_file}\t0\t" >> "${index_file}"
+  echo -e "Unknown\tUnknown\t${asm_name}\t${asm_name}\t${asm_name}\t${seq_dir}/${fasta_file}.gz\t0\t" >> "${index_file}"
 done
 
 # Clean up.

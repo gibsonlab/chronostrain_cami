@@ -7,3 +7,5 @@ export GOLD_STANDARD_GZ=${GOLD_STANDARD_DIR}/archives/strmgCAMI2_genomes.tar.gz
 
 export CHRONOSTRAIN_INI="chronostrain/chronostrain.ini"
 export CHRONOSTRAIN_LOG_INI="chronostrain/logging.ini"
+
+export GROUND_TRUTH_PROFILE_SRC="${MISC_DATA_DIR}/gs_strain_madness_short_long.profile.txt"
