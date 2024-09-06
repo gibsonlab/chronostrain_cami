@@ -1,4 +1,5 @@
 #!/bin/bash
+source settings_global.sh
 set -e
 
 from_incl=$1
