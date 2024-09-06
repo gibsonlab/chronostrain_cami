@@ -28,7 +28,7 @@ def main(input_paths: List[Path], out_path: Path):
             master_array += instance_array
 
     with open(out_path, "wt") as out_f:
-        json.dump(master_array, out_f)
+        json.dump(master_array, out_f, indent=4)
 
 
 if __name__ == "__main__":
