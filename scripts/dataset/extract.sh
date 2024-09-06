@@ -86,7 +86,7 @@ for i in $(seq ${from_incl} ${to_incl}); do
     echo "[! SUCCESS] Successfully extracted tarball for sample ${i}."
   else
     echo "[! ERROR] Tarball for sample ${i} is not valid. Re-run download script to try again."
-    rm "${tar_file}"
+    #rm "${tar_file}"
     continue
   fi
 
