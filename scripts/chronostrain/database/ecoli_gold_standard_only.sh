@@ -41,5 +41,8 @@ env \
 
 
 # Now add the gold-standard to the cluster file.
+# Extract from the JSON file all gold-standard genomes that made it into the database.
+cat "$CHRONOSTRAIN_GOLD_STANDARD_JSON" | grep "genus" -B 3 -A 3 | grep "id" | sed -r 's/\s+"id":\s"(.*?)",/\1/' > "${CHRONOSTRAIN_GOLD_STANDARD_CLUSTERS}"
+
 # Extract from the index file, printing only the 3rd column (awk), skipping the header line of the TSV (tail)
-awk 'BEGIN {FS="\t"} {print $3}' "${GOLD_STANDARD_INDEX}" | tail -n +2 > "${CHRONOSTRAIN_ALL_CLUSTERS}"
+#awk 'BEGIN {FS="\t"} {print $3}' "${GOLD_STANDARD_INDEX}" | tail -n +2 > "${CHRONOSTRAIN_GOLD_STANDARD_CLUSTERS}"
