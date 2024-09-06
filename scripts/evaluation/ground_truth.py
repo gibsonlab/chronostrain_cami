@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Dict, Generator, Tuple
+from typing import List, Dict, Iterator, Tuple
 from pathlib import Path
 
 import numpy as np
@@ -18,7 +18,7 @@ class StrainAbundanceProfile(object):
         self.strain_ids = strain_ids
 
 
-def profile_split_by_sample(profile_path: Path) -> Generator[List[str]]:
+def profile_split_by_sample(profile_path: Path) -> Iterator[List[str]]:
     """
     Split the huge profile.txt file into chunks of profiles, grouped by sample.
     :param profile_path:
@@ -42,7 +42,7 @@ def profile_split_by_sample(profile_path: Path) -> Generator[List[str]]:
             yield this_section
 
 
-def filter_profiles(profile_path: Path) -> Generator[Tuple[str, pd.DataFrame]]:
+def filter_profiles(profile_path: Path) -> Iterator[Tuple[str, pd.DataFrame]]:
     for profile_text in profile_split_by_sample(profile_path):
         sample_id_line = profile_text[0]
         prefix = '@SampleID:'
@@ -81,18 +81,16 @@ def parse_profile_into_dataframe(profile_text: List[str]) -> pd.DataFrame:
     return pd.DataFrame(df_entries)
 
 
-def all_renormalized_profiles(profile_path: Path, restrict_species: SpeciesLabel) -> Dict[int, StrainAbundanceProfile]:
-    mapping = dict()
-    target_str = f"|{restrict_species.genus} {restrict_species.species}|"
-    for sample_tag, profile_df in filter_profiles(profile_path):
-        strain_df = profile_df.loc[profile_df['Rank'] == 'strain']
-        strain_slice = strain_df.loc[strain_df.str.contains(target_str)]
+def renormalize_profile(profile_df: pd.DataFrame, restrict_species: SpeciesLabel) -> StrainAbundanceProfile:
+    target_str = rf"\|{restrict_species.genus} {restrict_species.species}\|"
+    
+    strain_df = profile_df.loc[profile_df['Rank'] == 'strain']
+    strain_slice = strain_df.loc[strain_df['TaxPathScientific'].str.contains(target_str)]
+    
+    strain_ids = list(strain_slice['CAMI_Genome'])  # the gold-standard IDs.
+    abundances = strain_slice['Percentage'].to_numpy() / 100.0
 
-        strain_ids = list(strain_slice['CAMI_Genome'])  # the gold-standard IDs.
-        abundance_ratios = strain_slice['Percentage'].to_numpy() / 100.0
-        abundance_ratios = abundance_ratios / np.sum(abundance_ratios)
-
-        mapping[sample_tag] = StrainAbundanceProfile(
-            abundance_ratios=abundance_ratios,
-            strain_ids=strain_ids
-        )
+    return StrainAbundanceProfile(
+        abundance_ratios=abundances / np.sum(abundances),
+        strain_ids=strain_ids
+    )
