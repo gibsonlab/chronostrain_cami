@@ -3,7 +3,6 @@ source settings_global.sh
 
 # Required Files
 CHRONOSTRAIN_DB_DIR="${DATA_DIR}/inference/databases/chronostrain/ecoli"
-GOLD_STANDARD_INDEX="${DATA_DIR}/gold_standard_genomes/index.tsv"
 
 MARKER_SEED_INDEX="${MISC_DATA_DIR}/chronostrain_seeds/ecoli/marker_seed_index.tsv"
 if [ ! -f ${MARKER_SEED_INDEX} ]; then
@@ -39,3 +38,8 @@ env \
       --min-pct-idty "$MARKER_MIN_PCT_IDTY" \
       -o "$CHRONOSTRAIN_GOLD_STANDARD_JSON" \
       --threads "$NUM_CORES"
+
+
+# Now add the gold-standard to the cluster file.
+# Extract from the index file, printing only the 3rd column (awk), skipping the header line of the TSV (tail)
+awk 'BEGIN {FS="\t"} {print $3}' "${GOLD_STANDARD_INDEX}" | tail -n +2 > "${CHRONOSTRAIN_ALL_CLUSTERS}"

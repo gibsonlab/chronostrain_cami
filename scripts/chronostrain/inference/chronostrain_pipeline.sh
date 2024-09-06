@@ -6,6 +6,7 @@ set -e
 
 out_subdir=$1
 database_json=$2
+cluster_file=$3
 
 
 num_fastq_reads() {
@@ -58,6 +59,7 @@ pipeline_single_sample() {
       chronostrain filter \
       -r "${reads_csv}" \
       -o "${outdir}/filtered" \
+      -s "${cluster_file}" \
       -f "filtered_reads.csv" \
       --aligner bwa-mem2
     touch "${filter_breadcrumb}"
@@ -76,6 +78,7 @@ pipeline_single_sample() {
       chronostrain advi \
       -r "${expected_filter_file}" \
       -o "${outdir}" \
+      -s "${cluster_file}" \
       --correlation-mode "full" \
       --iters "${CHRONOSTRAIN_NUM_ITERS}" \
       --epochs "${CHRONOSTRAIN_NUM_EPOCHS}" \
