@@ -1,20 +1,13 @@
 #!/bin/bash
 source settings_global.sh
 source chronostrain/settings.sh
+source chronostrain/inference/helpers.sh
 set -e
 
 
 out_subdir=$1
 database_json=$2
 cluster_file=$3
-
-
-num_fastq_reads() {
-  fq_gz_file=$1
-  num_lines=$(pigz -dc "$fq_gz_file" | wc -l | awk '{print $1}')
-	num_reads=$((${num_lines} / 4))
-	echo "${num_reads}"
-}
 
 
 pipeline_single_sample() {
