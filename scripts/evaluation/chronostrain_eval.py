@@ -43,6 +43,35 @@ class ChronoStrainInferenceResult:
         adhoc_rep_id = self.adhoc_clusters[strain_id]
         return self.inference_ordering[adhoc_rep_id], self.adhoc_clust_sizes[adhoc_rep_id]
 
+    def to_profile(
+            self,
+            strain_id_ordering: List[str],
+            posterior_lb: float = 0.9901,
+            n_samples: int = 5000
+    ) -> StrainAbundanceProfile:
+        g, z = self.get_samples(n_samples)
+
+        # Filter by posterior
+        posterior_p = self.posterior_inclusion_probs()
+        indicators = posterior_p > posterior_lb
+
+        log_indicators = np.empty(indicators.shape, dtype=float)
+        log_indicators[indicators] = 0.0
+        log_indicators[~indicators] = -np.inf
+
+        pred_abundances_wrapped = scipy.special.softmax(g + np.expand_dims(log_indicators, axis=[0, 1]), axis=-1)
+
+        # Fill in the prediction matrix. (Undo the ad-hoc clustering by dividing the abundance.)
+        predictions = np.empty(shape=(n_samples, len(strain_id_ordering)), dtype=float)
+        for tgt_idx, tgt_strain in enumerate(strain_id_ordering):
+            adhoc_idx, adhoc_clust_sz = self.adhoc_cluster_info(tgt_strain)
+            predictions[:, tgt_idx] = pred_abundances_wrapped[0, :, adhoc_idx] / adhoc_clust_sz
+
+        return StrainAbundanceProfile(
+            abundance_ratios=predictions / np.sum(predictions, axis=-1, keepdims=True),
+            strain_ids=strain_id_ordering
+        )
+
 
 def parse_chronostrain_strains(txt_file: Path) -> List[str]:
     with open(txt_file, 'rt') as f:
@@ -73,34 +102,4 @@ def extract_chronostrain_prediction(inference_dir: Path) -> ChronoStrainInferenc
         parse_posterior_model(inference_dir / f"posterior.{cfg.engine_cfg.dtype}.npz", len(strain_list)),
         strain_list,
         parse_adhoc_clusters(inference_dir / "adhoc_cluster.txt"),
-    )
-
-
-def chronostrain_prediction_to_profile(
-        inference_result: ChronoStrainInferenceResult,
-        strain_id_ordering: List[str],
-        posterior_lb: float = 0.9901,
-        n_samples: int = 5000
-) -> StrainAbundanceProfile:
-    g, z = inference_result.get_samples(n_samples)
-
-    # Filter by posterior
-    posterior_p = inference_result.posterior_inclusion_probs()
-    indicators = posterior_p > posterior_lb
-
-    log_indicators = np.empty(indicators.shape, dtype=float)
-    log_indicators[indicators] = 0.0
-    log_indicators[~indicators] = -np.inf
-    
-    pred_abundances_wrapped = scipy.special.softmax(g + np.expand_dims(log_indicators, axis=[0, 1]), axis=-1)
-
-    # Fill in the prediction matrix. (Undo the ad-hoc clustering by dividing the abundance.)
-    predictions = np.empty(shape=(n_samples, len(strain_id_ordering)), dtype=float)
-    for tgt_idx, tgt_strain in enumerate(strain_id_ordering):
-        adhoc_idx, adhoc_clust_sz = inference_result.adhoc_cluster_info(tgt_strain)
-        predictions[:, tgt_idx] = pred_abundances_wrapped[0, :, adhoc_idx] / adhoc_clust_sz
-
-    return StrainAbundanceProfile(
-        abundance_ratios=predictions / np.sum(predictions, axis=-1, keepdims=True),
-        strain_ids=strain_id_ordering
     )
