@@ -5,6 +5,7 @@ source mgems/settings.sh
 
 mkdir -p "${MGEMS_GOLD_STANDARD_ONLY_REF_DIR}"
 cd "${MGEMS_GOLD_STANDARD_ONLY_REF_DIR}" || exit 1
+echo "Working in ${MGEMS_GOLD_STANDARD_ONLY_REF_DIR}"
 
 
 # Extract the list of fasta file paths.
