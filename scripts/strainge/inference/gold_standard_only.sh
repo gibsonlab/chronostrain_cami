@@ -48,3 +48,9 @@ run_straingst() {
   touch "${run_breadcrumb}"
 }
 
+
+for i in $(seq 0 99); do
+  echo "[* straingst_gold_standard_only] Handling sample ${i}..."
+  run_straingst "${i}"
+done
+
