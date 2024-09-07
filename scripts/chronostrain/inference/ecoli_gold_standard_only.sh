@@ -43,6 +43,7 @@ pipeline_single_sample() {
     echo "${DEFAULT_T},SAMPLE_${sample_id},${n_rev},${fq2},paired_2,fastq" >> "${reads_csv}"
 
     # Invoke CLI interface.
+    set +e  # terminate on error.
     env JAX_PLATFORM_NAME=cpu \
       CHRONOSTRAIN_DB_JSON="${database_json}" \
       CHRONOSTRAIN_DB_DIR="${CHRONOSTRAIN_DB_DIR}" \
@@ -55,6 +56,7 @@ pipeline_single_sample() {
       -f "filtered_reads.csv" \
       --aligner bwa-mem2
     touch "${filter_breadcrumb}"
+    set -e
   fi
 
   # Inference: No clusters passed for this run!
@@ -62,6 +64,7 @@ pipeline_single_sample() {
     echo "[!] Inference for ${sample_id} already done."
   else
     expected_filter_file="${outdir}/filtered/filtered_reads.csv"
+    set +e  # terminate on error.
     env \
       CHRONOSTRAIN_DB_JSON="${database_json}" \
       CHRONOSTRAIN_DB_DIR="${CHRONOSTRAIN_DB_DIR}" \
@@ -84,9 +87,9 @@ pipeline_single_sample() {
       --plot-format "pdf" \
       --plot-elbo \
       --prune-strains \
-      --without-zeros \
-      --prior-p 0.001
+      --without-zeros
     touch "${inference_breadcrumb}"
+    set -e
   fi
 }
 
