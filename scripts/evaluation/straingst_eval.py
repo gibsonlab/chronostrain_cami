@@ -1,7 +1,7 @@
 from typing import *
 from pathlib import Path
 
-from numpy as np
+import numpy as np
 import pandas as pd
 from base import StrainAbundanceProfile
 
