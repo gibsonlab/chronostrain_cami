@@ -6,42 +6,6 @@ set -e
 # NOTE: this script needs fixing. The reason is that the "strain" index should only contain species bin-specific genomes, but this script (as written) uses all 408 gold-standard genomes.
 
 
-aln_and_compress()
-{
-	in1=$1
-	in2=$2
-	aln1=$3
-	aln2=$4
-	tmp_dir=$5
-	ref_index=$6
-	index_num_colors=$7
-
-	input_file=${tmp_dir}/query_files.txt
-  output_file=${tmp_dir}/output_files.txt
-	aln_raw1=${tmp_dir}/aln1.txt
-	aln_raw2=${tmp_dir}/aln2.txt
-
-	# prepare input txt file list
-  echo "${in1}" > "$input_file"
-  echo "${in2}" >> "$input_file"
-
-  echo "${aln_raw1}" > "$output_file"
-  echo "${aln_raw2}" >> "$output_file"
-
-	themisto pseudoalign \
-    --index-prefix "${ref_index}" --rc --temp-dir ${tmp_dir} --n-threads ${N_CORES} --sort-output-lines \
-    --query-file-list "$input_file" \
-    --out-file-list "$output_file" \
-
-  n1=$(wc -l < "${aln_raw1}")
-  n2=$(wc -l < "${aln_raw2}")
-  echo "alignment-writer -n ${index_num_colors} -r $n1 -f $aln_raw1 > $aln1"
-  alignment-writer -n ${index_num_colors} -r $n1 -f $aln_raw1 > $aln1
-  echo "alignment-writer -n ${index_num_colors} -r $n2 -f $aln_raw2 > $aln2"
-  alignment-writer -n ${index_num_colors} -r $n2 -f $aln_raw2 > $aln2
-}
-
-
 run_mgems_species() {
   outdir=$1
   fq1=$2
