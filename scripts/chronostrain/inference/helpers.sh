@@ -86,7 +86,7 @@ pipeline_single_sample() {
       env \
         CHRONOSTRAIN_DB_JSON="${database_json}" \
         CHRONOSTRAIN_DB_DIR="${db_dir}" \
-        CHRONOSTRAIN_LOG_FILEPATH="${logdir}/inference.log" \
+        CHRONOSTRAIN_LOG_FILEPATH="${logdir}/inference.sparse.log" \
         CHRONOSTRAIN_CACHE_DIR="${CHRONOSTRAIN_CACHE_DIR}/${out_subdir}" \
         chronostrain advi \
         -r "${expected_filter_file}" \
@@ -110,7 +110,7 @@ pipeline_single_sample() {
       env \
         CHRONOSTRAIN_DB_JSON="${database_json}" \
         CHRONOSTRAIN_DB_DIR="${db_dir}" \
-        CHRONOSTRAIN_LOG_FILEPATH="${logdir}/inference.log" \
+        CHRONOSTRAIN_LOG_FILEPATH="${logdir}/inference.dense.log" \
         CHRONOSTRAIN_CACHE_DIR="${CHRONOSTRAIN_CACHE_DIR}/${out_subdir}" \
         chronostrain advi \
         -r "${expected_filter_file}" \
