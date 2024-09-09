@@ -13,6 +13,7 @@ pipeline_single_sample() {
   db_dir=$3
   database_json=$4
   cluster_file=$5
+  sparse_mode=$6
 
   outdir="${DATA_DIR}/inference/output/${out_subdir}/sample_${sample_id}"
   logdir=${outdir}/logs
@@ -70,29 +71,55 @@ pipeline_single_sample() {
     echo "[! - ${out_subdir}] Running inference for ${sample_id}."
     expected_filter_file="${outdir}/filtered/filtered_reads.csv"
     set +e  # terminate on error.
-    env \
-      CHRONOSTRAIN_DB_JSON="${database_json}" \
-      CHRONOSTRAIN_DB_DIR="${db_dir}" \
-      CHRONOSTRAIN_LOG_FILEPATH="${logdir}/inference.log" \
-      CHRONOSTRAIN_CACHE_DIR="${CHRONOSTRAIN_CACHE_DIR}/${out_subdir}" \
-      chronostrain advi \
-      -r "${expected_filter_file}" \
-      -o "${outdir}" \
-      -s "${cluster_file}" \
-      --correlation-mode "full" \
-      --iters "${CHRONOSTRAIN_NUM_ITERS}" \
-      --epochs "${CHRONOSTRAIN_NUM_EPOCHS}" \
-      --decay-lr "${CHRONOSTRAIN_DECAY_LR}" \
-      --lr-patience "${CHRONOSTRAIN_LR_PATIENCE}" \
-      --loss-tol "${CHRONOSTRAIN_LOSS_TOL}" \
-      --learning-rate "${CHRONOSTRAIN_LR}" \
-      --num-samples "${CHRONOSTRAIN_NUM_SAMPLES}" \
-      --read-batch-size "${CHRONOSTRAIN_READ_BATCH_SZ}" \
-      --min-lr "${CHRONOSTRAIN_MIN_LR}" \
-      --plot-format "pdf" \
-      --plot-elbo \
-      --prune-strains \
-      --without-zeros
+    if [ "${sparse_mode}" == "sparse" ]; then
+      env \
+        CHRONOSTRAIN_DB_JSON="${database_json}" \
+        CHRONOSTRAIN_DB_DIR="${db_dir}" \
+        CHRONOSTRAIN_LOG_FILEPATH="${logdir}/inference.log" \
+        CHRONOSTRAIN_CACHE_DIR="${CHRONOSTRAIN_CACHE_DIR}/${out_subdir}" \
+        chronostrain advi \
+        -r "${expected_filter_file}" \
+        -o "${outdir}" \
+        -s "${cluster_file}" \
+        --correlation-mode "full" \
+        --iters "${CHRONOSTRAIN_NUM_ITERS}" \
+        --epochs "${CHRONOSTRAIN_NUM_EPOCHS}" \
+        --decay-lr "${CHRONOSTRAIN_DECAY_LR}" \
+        --lr-patience "${CHRONOSTRAIN_LR_PATIENCE}" \
+        --loss-tol "${CHRONOSTRAIN_LOSS_TOL}" \
+        --learning-rate "${CHRONOSTRAIN_LR}" \
+        --num-samples "${CHRONOSTRAIN_NUM_SAMPLES}" \
+        --read-batch-size "${CHRONOSTRAIN_READ_BATCH_SZ}" \
+        --min-lr "${CHRONOSTRAIN_MIN_LR}" \
+        --plot-format "pdf" \
+        --plot-elbo \
+        --prune-strains \
+        --with-zeros  # Sparse mode
+    elif [ "${sparse_mode}" == "dense" ]; then
+      env \
+        CHRONOSTRAIN_DB_JSON="${database_json}" \
+        CHRONOSTRAIN_DB_DIR="${db_dir}" \
+        CHRONOSTRAIN_LOG_FILEPATH="${logdir}/inference.log" \
+        CHRONOSTRAIN_CACHE_DIR="${CHRONOSTRAIN_CACHE_DIR}/${out_subdir}" \
+        chronostrain advi \
+        -r "${expected_filter_file}" \
+        -o "${outdir}" \
+        -s "${cluster_file}" \
+        --correlation-mode "full" \
+        --iters "${CHRONOSTRAIN_NUM_ITERS}" \
+        --epochs "${CHRONOSTRAIN_NUM_EPOCHS}" \
+        --decay-lr "${CHRONOSTRAIN_DECAY_LR}" \
+        --lr-patience "${CHRONOSTRAIN_LR_PATIENCE}" \
+        --loss-tol "${CHRONOSTRAIN_LOSS_TOL}" \
+        --learning-rate "${CHRONOSTRAIN_LR}" \
+        --num-samples "${CHRONOSTRAIN_NUM_SAMPLES}" \
+        --read-batch-size "${CHRONOSTRAIN_READ_BATCH_SZ}" \
+        --min-lr "${CHRONOSTRAIN_MIN_LR}" \
+        --plot-format "pdf" \
+        --plot-elbo \
+        --prune-strains \
+        --without-zeros  # Dense mode
+    fi
     touch "${inference_breadcrumb}"
     set -e
   fi
