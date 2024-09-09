@@ -1,4 +1,5 @@
 export MGEMS_DB_DIR="/mnt/e/CAMI_strain_madness/inference/databases/mgems"
+export N_CORES=6
 
 # re-use the same large taxonomic db from the other experiments.
 export SPECIES_REF_DIR="/mnt/e/semisynthetic_data/databases/mgems/themisto_640k"

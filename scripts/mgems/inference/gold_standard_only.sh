@@ -1,6 +1,7 @@
 #!/bin/bash
 source settings_global.sh
 source mgems/settings.sh
+set -e
 
 
 aln_and_compress()
