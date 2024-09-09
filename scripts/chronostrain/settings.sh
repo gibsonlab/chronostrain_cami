@@ -1,10 +1,20 @@
 # These databases use Ecoli markers (TODO: refactor these variable names to specify this)
-export CHRONOSTRAIN_DB_DIR="${DATA_DIR}/inference/databases/chronostrain/ecoli"
-export CHRONOSTRAIN_GOLD_STANDARD_JSON="${CHRONOSTRAIN_DB_DIR}/gold_standard_only.json"
-export CHRONOSTRAIN_GOLD_STANDARD_CLUSTERS="${CHRONOSTRAIN_DB_DIR}/gold_standard_only.clusters.txt"
+export CHRONOSTRAIN_DB_BASEDIR="${DATA_DIR}/inference/databases/chronostrain"
 
-export CHRONOSTRAIN_ALL_JSON="${CHRONOSTRAIN_DB_DIR}/all.json"
-export CHRONOSTRAIN_ALL_CLUSTERS="${CHRONOSTRAIN_DB_DIR}/all.clusters.txt"
+export CHRONOSTRAIN_ECOLI_DB_DIR="${CHRONOSTRAIN_DB_BASEDIR}/ecoli"
+export CHRONOSTRAIN_ECOLI_GOLD_STANDARD_JSON="${CHRONOSTRAIN_ECOLI_DB_DIR}/gold_standard_only.json"
+export CHRONOSTRAIN_ECOLI_GOLD_STANDARD_CLUSTERS="${CHRONOSTRAIN_ECOLI_DB_DIR}/gold_standard_only.clusters.txt"
+
+export CHRONOSTRAIN_SAUREUS_DB_DIR="${DATA_DIR}/inference/databases/chronostrain/s_aureus"
+export CHRONOSTRAIN_SAUREUS_GOLD_STANDARD_JSON="${CHRONOSTRAIN_SAUREUS_DB_DIR}/gold_standard_only.json"
+export CHRONOSTRAIN_SAUREUS_GOLD_STANDARD_CLUSTERS="${CHRONOSTRAIN_SAUREUS_DB_DIR}/gold_standard_only.clusters.txt"
+
+export CHRONOSTRAIN_SPNEUMONIAE_DB_DIR="${DATA_DIR}/inference/databases/chronostrain/s_pneumoniae"
+export CHRONOSTRAIN_SPNEUMONIAE_GOLD_STANDARD_JSON="${CHRONOSTRAIN_SAUREUS_DB_DIR}/gold_standard_only.json"
+export CHRONOSTRAIN_SPNEUMONIAE_GOLD_STANDARD_CLUSTERS="${CHRONOSTRAIN_SAUREUS_DB_DIR}/gold_standard_only.clusters.txt"
+
+export CHRONOSTRAIN_ALL_JSON="${CHRONOSTRAIN_DB_BASEDIR}/all.json"
+export CHRONOSTRAIN_ALL_CLUSTERS="${CHRONOSTRAIN_DB_BASEDIR}/all.clusters.txt"
 
 export CHRONOSTRAIN_REF_ONLY_JSON="/mnt/e/ecoli_db/chronostrain_files/ecoli.json"
 export CHRONOSTRAIN_REF_ONLY_CLUSTERS="/mnt/e/ecoli_db/chronostrain_files/ecoli.clusters.txt"

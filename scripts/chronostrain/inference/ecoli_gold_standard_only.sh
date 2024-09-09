@@ -5,8 +5,9 @@ source chronostrain/inference/helpers.sh
 
 
 out_subdir="chronostrain_gold_standard_only"
-database_json="${CHRONOSTRAIN_GOLD_STANDARD_JSON}"
-cluster_file="${CHRONOSTRAIN_GOLD_STANDARD_CLUSTERS}"
+db_dir="${CHRONOSTRAIN_ECOLI_DB_DIR}"
+database_json="${CHRONOSTRAIN_ECOLI_GOLD_STANDARD_JSON}"
+cluster_file="${CHRONOSTRAIN_ECOLI_GOLD_STANDARD_CLUSTERS}"
 
 
 pipeline_single_sample() {
@@ -46,7 +47,7 @@ pipeline_single_sample() {
     set +e  # terminate on error.
     env JAX_PLATFORM_NAME=cpu \
       CHRONOSTRAIN_DB_JSON="${database_json}" \
-      CHRONOSTRAIN_DB_DIR="${CHRONOSTRAIN_DB_DIR}" \
+      CHRONOSTRAIN_DB_DIR="${db_dir}" \
       CHRONOSTRAIN_LOG_FILEPATH="${logdir}/filter.log" \
       CHRONOSTRAIN_CACHE_DIR="${CHRONOSTRAIN_CACHE_DIR}/${out_subdir}" \
       chronostrain filter \
@@ -67,7 +68,7 @@ pipeline_single_sample() {
     set +e  # terminate on error.
     env \
       CHRONOSTRAIN_DB_JSON="${database_json}" \
-      CHRONOSTRAIN_DB_DIR="${CHRONOSTRAIN_DB_DIR}" \
+      CHRONOSTRAIN_DB_DIR="${db_dir}" \
       CHRONOSTRAIN_LOG_FILEPATH="${logdir}/inference.log" \
       CHRONOSTRAIN_CACHE_DIR="${CHRONOSTRAIN_CACHE_DIR}/${out_subdir}" \
       chronostrain advi \
