@@ -65,4 +65,4 @@ run_mgems_pipeline() {
 
 i=0
 echo "[* mgems_gold_standard_only] Handling sample ${i}..."
-run_mgems_hierarchical "${i}"
+run_mgems_pipeline "${i}"
