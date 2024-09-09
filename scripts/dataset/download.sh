@@ -13,7 +13,7 @@ for i in $(seq 0 99); do
       echo "Target tarball ${target_file} already exists."
       continue
   fi
-  wget --tries 100 "https://frl.publisso.de/data/frl:6425521/strain/short_read/strmgCAMI2_sample_${i}_reads.tar.gz" -O "$target_file"
+  wget --tries inf "https://frl.publisso.de/data/frl:6425521/strain/short_read/strmgCAMI2_sample_${i}_reads.tar.gz" -O "$target_file"
 done
 
 ## Parallel solution, outdated (file paths are also outdated!)
