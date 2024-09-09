@@ -4,10 +4,10 @@ source chronostrain/settings.sh
 source chronostrain/inference/helpers.sh
 
 
-out_subdir="chronostrain_ecoli_gold_standard_only"
-db_dir="${CHRONOSTRAIN_ECOLI_DB_DIR}"
-database_json="${CHRONOSTRAIN_ECOLI_GOLD_STANDARD_JSON}"
-cluster_file="${CHRONOSTRAIN_ECOLI_GOLD_STANDARD_CLUSTERS}"
+out_subdir="chronostrain_spneumoniae_gold_standard_only"
+db_dir="${CHRONOSTRAIN_SPNEUMONIAE_DB_DIR}"
+database_json="${CHRONOSTRAIN_SPNEUMONIAE_GOLD_STANDARD_JSON}"
+cluster_file="${CHRONOSTRAIN_SPNEUMONIAE_GOLD_STANDARD_CLUSTERS}"
 
 
 
