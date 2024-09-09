@@ -44,6 +44,7 @@ def msweep_parse_abundances(msweep_output_path: Path, ref_info_path: Path) -> pd
             df_entries.append({"Cluster": tokens[0], "Abundance": float(tokens[1])})
 
     cluster_df = pd.read_csv(ref_info_path, sep='\t')
+    cluster_df['Cluster'] = cluster_df['Cluster'].astype(str)
     return pd.DataFrame(df_entries).merge(cluster_df, on='Cluster', how='inner')
 
 
