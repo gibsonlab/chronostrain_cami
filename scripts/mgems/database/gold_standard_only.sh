@@ -1,7 +1,7 @@
 #!/bin/bash
 source settings_global.sh
 source mgems/settings.sh
-
+# Creates a themisto index using all gold-standard genomes.
 
 mkdir -p "${MGEMS_GOLD_STANDARD_ONLY_REF_DIR}"
 cd "${MGEMS_GOLD_STANDARD_ONLY_REF_DIR}" || exit 1

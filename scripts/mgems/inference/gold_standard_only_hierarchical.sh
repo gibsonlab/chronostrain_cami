@@ -2,6 +2,8 @@
 source settings_global.sh
 source mgems/settings.sh
 set -e
+# Runs mGEMS in hierarchical mode.
+# NOTE: this script needs fixing. The reason is that the "strain" index should only contain species bin-specific genomes, but this script (as written) uses all 408 gold-standard genomes.
 
 
 aln_and_compress()
