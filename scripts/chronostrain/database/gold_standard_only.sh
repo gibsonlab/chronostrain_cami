@@ -11,13 +11,15 @@ create_from_seeds() {
   json_path=$3
   cluster_path=$4
 
+  echo "[!] Starting database creation routine for ${taxa_name}."
+
   marker_seed_index="${MISC_DATA_DIR}/chronostrain_seeds/${taxa_name}/marker_seed_index.tsv"
   if [ ! -f "${marker_seed_index}" ]; then
-    echo "Extracting marker seeds from archive."
+    echo "[!] Extracting marker seeds from archive."
     tar -xvzf "${MISC_DATA_DIR}/chronostrain_seeds.tar.gz" -C "${MISC_DATA_DIR}"
   fi
   if [ ! -f "${marker_seed_index}" ]; then
-    echo "Archive did not contain marker seed index for taxa ${taxa_name}."
+    echo "[! Error] Archive did not contain marker seed index for taxa ${taxa_name}."
     exit 1
   fi
 
@@ -35,14 +37,14 @@ create_from_seeds() {
   if [ ! -f "${marker_seed_index}" ]; then echo "Couldn't find ${marker_seed_index}"; fi
   mkdir -p "${db_dir}"
   mkdir -p "${blast_db_dir}"
-  echo "All necessary files accounted for."
+  echo "[!] All necessary files accounted for. Invoking chronostrain make-db."
 
   # Construct the gold-standard-only DB.
   env \
       JAX_PLATFORM_NAME=cpu \
       CHRONOSTRAIN_DB_DIR="${db_dir}" \
       CHRONOSTRAIN_LOG_INI=logging.ini \
-      chronostrain -c chronostrain.ini \
+      chronostrain -c ../chronostrain.ini \
         make-db \
         -m "${marker_seed_index}" \
         -r "$GOLD_STANDARD_INDEX" \
