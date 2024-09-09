@@ -33,16 +33,16 @@ run_mgems_gold_standard() {
 
   set +e
   mkdir -p "${tmpdir}"
-  echo "[* Themisto] Aligning reads."
-  aln_and_compress "$fq1" "$fq2" "$aln1" "$aln2" "$tmpdir" "${SPECIES_REF_DIR}/${SPECIES_REF_INDEX}" "${SPECIES_N_COLORS}"
+  echo "[* Themisto - gold-standard-only] Aligning reads."
+  aln_and_compress "$fq1" "$fq2" "$aln1" "$aln2" "$tmpdir" "${MGEMS_GOLD_STANDARD_ONLY_REF_DIR}/${MGEMS_GOLD_STANDARD_ONLY_REF_INDEX}" "${MGEMS_GOLD_STANDARD_ONLY_N_COLORS}"
 
-  echo "[* mSWEEP] Running mSWEEP abundance estimation."
+  echo "[* mSWEEP - gold-standard-only] Running mSWEEP abundance estimation."
   # No need to bin reads here. Not running hierarchical mode.
   mSWEEP \
     -t "${N_CORES}" \
     --themisto-1 "${aln1}" --themisto-2 "${aln2}"  \
     -o "${outdir}/msweep" \
-    -i "${SPECIES_REF_DIR}/${SPECIES_REF_CLUSTER}" \
+    -i "${MGEMS_GOLD_STANDARD_ONLY_REF_DIR}/${MGEMS_GOLD_STANDARD_ONLY_REF_CLUSTER}" \
     --verbose
 
   echo "[*] Cleaning up."
