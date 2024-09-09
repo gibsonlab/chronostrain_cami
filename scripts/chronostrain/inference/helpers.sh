@@ -119,6 +119,9 @@ pipeline_single_sample() {
         --plot-elbo \
         --prune-strains \
         --without-zeros  # Dense mode
+    else
+      echo "[!] Unsupported sparse_mode string ${sparse_mode}."
+      exit 1
     fi
     touch "${inference_breadcrumb}"
     set -e
