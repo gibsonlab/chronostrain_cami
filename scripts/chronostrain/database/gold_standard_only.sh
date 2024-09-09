@@ -44,8 +44,7 @@ create_from_seeds() {
       JAX_PLATFORM_NAME=cpu \
       CHRONOSTRAIN_DB_DIR="${db_dir}" \
       CHRONOSTRAIN_LOG_INI=logging.ini \
-      chronostrain -c ../chronostrain.ini \
-        make-db \
+      chronostrain make-db \
         -m "${marker_seed_index}" \
         -r "$GOLD_STANDARD_INDEX" \
         -b "${blast_db_name}" -bd "${blast_db_dir}" \
