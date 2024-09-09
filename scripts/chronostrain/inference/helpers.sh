@@ -105,6 +105,7 @@ pipeline_single_sample() {
         --plot-format "pdf" \
         --plot-elbo \
         --prune-strains \
+        --adhoc-corr-threshold 0.999 \
         --with-zeros  # Sparse mode
     else
       env \
@@ -129,6 +130,7 @@ pipeline_single_sample() {
         --plot-format "pdf" \
         --plot-elbo \
         --prune-strains \
+        --adhoc-corr-threshold 0.999 \
         --without-zeros  # Dense mode
     fi
     touch "${inference_breadcrumb}"
