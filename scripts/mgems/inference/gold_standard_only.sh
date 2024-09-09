@@ -63,6 +63,7 @@ run_mgems_pipeline() {
 }
 
 
-i=0
-echo "[* mgems_gold_standard_only] Handling sample ${i}..."
-run_mgems_pipeline "${i}"
+for i in $(seq 0 99); do
+  echo "[* mgems_gold_standard_only] Handling sample ${i}..."
+  run_mgems_pipeline "${i}"
+done
