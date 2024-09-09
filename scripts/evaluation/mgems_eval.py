@@ -34,7 +34,7 @@ def msweep_parse_abundances(msweep_output_path: Path, ref_info_path: Path) -> pd
     with open(msweep_output_path, "rt") as f:
         for line in f:
             line = line.strip()
-            if f.startswith("#"):
+            if line.startswith("#"):
                 continue
             tokens = line.split("\t")
             if len(tokens) != 2:
