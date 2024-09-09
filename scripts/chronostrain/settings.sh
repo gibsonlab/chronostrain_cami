@@ -1,7 +1,7 @@
 # These databases use Ecoli markers (TODO: refactor these variable names to specify this)
 export CHRONOSTRAIN_DB_BASEDIR="${DATA_DIR}/inference/databases/chronostrain"
 
-export CHRONOSTRAIN_ECOLI_DB_DIR="${CHRONOSTRAIN_DB_BASEDIR}/ecoli"
+export CHRONOSTRAIN_ECOLI_DB_DIR="${CHRONOSTRAIN_DB_BASEDIR}/e_coli"
 export CHRONOSTRAIN_ECOLI_GOLD_STANDARD_JSON="${CHRONOSTRAIN_ECOLI_DB_DIR}/gold_standard_only.json"
 export CHRONOSTRAIN_ECOLI_GOLD_STANDARD_CLUSTERS="${CHRONOSTRAIN_ECOLI_DB_DIR}/gold_standard_only.clusters.txt"
 
