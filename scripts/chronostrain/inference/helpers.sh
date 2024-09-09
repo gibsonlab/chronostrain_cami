@@ -19,8 +19,7 @@ pipeline_single_sample() {
   logdir=${outdir}/logs
 
   # Breadcrumb files.
-  filter_breadcrumb="${outdir}/filter.DONE"
-  inference_breadcrumb="${outdir}/inference.DONE"
+  filter_breadcrumb="${outdir}/filtered/filter.DONE"
 
   # Run filtering
   if [ -f "${filter_breadcrumb}" ]; then
@@ -64,14 +63,26 @@ pipeline_single_sample() {
     set -e
   fi
 
-  # Inference: No clusters passed for this run!
-  if [ -f "${inference_breadcrumb}" ]; then
-    echo "[! - ${out_subdir}] Inference for ${sample_id} already done."
+  if [ "${sparse_mode}" == "sparse" ]; then
+    inference_outdir="${outdir}/sparse_model"
+    is_sparse="True"
+  elif [ "${sparse_mode}" == "dense" ]; then
+    inference_outdir="${outdir}/dense_model"
+    is_sparse="False"
   else
-    echo "[! - ${out_subdir}] Running inference for ${sample_id}."
+    echo "[!] Unsupported sparse_mode string ${sparse_mode}."
+    exit 1
+  fi
+
+
+  inference_breadcrumb="${inference_outdir}/inference.DONE"
+  if [ -f "${inference_breadcrumb}" ]; then
+    echo "[! - ${out_subdir} | ${sparse_mode}] Inference for ${sample_id} already done."
+  else
+    echo "[! - ${out_subdir} | ${sparse_mode}] Running inference for ${sample_id}."
     expected_filter_file="${outdir}/filtered/filtered_reads.csv"
     set +e  # terminate on error.
-    if [ "${sparse_mode}" == "sparse" ]; then
+    if [ "${is_sparse}" == "True" ]; then
       env \
         CHRONOSTRAIN_DB_JSON="${database_json}" \
         CHRONOSTRAIN_DB_DIR="${db_dir}" \
@@ -79,7 +90,7 @@ pipeline_single_sample() {
         CHRONOSTRAIN_CACHE_DIR="${CHRONOSTRAIN_CACHE_DIR}/${out_subdir}" \
         chronostrain advi \
         -r "${expected_filter_file}" \
-        -o "${outdir}" \
+        -o "${inference_outdir}" \
         -s "${cluster_file}" \
         --correlation-mode "full" \
         --iters "${CHRONOSTRAIN_NUM_ITERS}" \
@@ -95,7 +106,7 @@ pipeline_single_sample() {
         --plot-elbo \
         --prune-strains \
         --with-zeros  # Sparse mode
-    elif [ "${sparse_mode}" == "dense" ]; then
+    else
       env \
         CHRONOSTRAIN_DB_JSON="${database_json}" \
         CHRONOSTRAIN_DB_DIR="${db_dir}" \
@@ -103,7 +114,7 @@ pipeline_single_sample() {
         CHRONOSTRAIN_CACHE_DIR="${CHRONOSTRAIN_CACHE_DIR}/${out_subdir}" \
         chronostrain advi \
         -r "${expected_filter_file}" \
-        -o "${outdir}" \
+        -o "${inference_outdir}" \
         -s "${cluster_file}" \
         --correlation-mode "full" \
         --iters "${CHRONOSTRAIN_NUM_ITERS}" \
@@ -119,9 +130,6 @@ pipeline_single_sample() {
         --plot-elbo \
         --prune-strains \
         --without-zeros  # Dense mode
-    else
-      echo "[!] Unsupported sparse_mode string ${sparse_mode}."
-      exit 1
     fi
     touch "${inference_breadcrumb}"
     set -e
