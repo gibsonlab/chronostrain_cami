@@ -23,8 +23,9 @@ pipeline_single_sample() {
 
   # Run filtering
   if [ -f "${filter_breadcrumb}" ]; then
-    echo "[!] Filtering for ${sample_id} already done."
+    echo "[! - ${out_subdir}] Filtering for ${sample_id} already done."
   else
+    echo "[! - ${out_subdir}] Running filtering for ${sample_id}."
     # Prepare input files and directories
     fq1="${DATA_DIR}/reads/extracted/sample_${sample_id}/1.fq.gz"
     fq2="${DATA_DIR}/reads/extracted/sample_${sample_id}/2.fq.gz"
@@ -64,8 +65,9 @@ pipeline_single_sample() {
 
   # Inference: No clusters passed for this run!
   if [ -f "${inference_breadcrumb}" ]; then
-    echo "[!] Inference for ${sample_id} already done."
+    echo "[! - ${out_subdir}] Inference for ${sample_id} already done."
   else
+    echo "[! - ${out_subdir}] Running inference for ${sample_id}."
     expected_filter_file="${outdir}/filtered/filtered_reads.csv"
     set +e  # terminate on error.
     env \
