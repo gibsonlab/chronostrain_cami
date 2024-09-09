@@ -47,7 +47,7 @@ pipeline_single_sample() {
     echo "${DEFAULT_T},SAMPLE_${sample_id},${n_rev},${fq2},paired_2,fastq" >> "${reads_csv}"
 
     # Invoke CLI interface.
-    set +e  # terminate on error.
+    set -e  # terminate on error.
     env JAX_PLATFORM_NAME=cpu \
       CHRONOSTRAIN_DB_JSON="${database_json}" \
       CHRONOSTRAIN_DB_DIR="${db_dir}" \
@@ -60,7 +60,7 @@ pipeline_single_sample() {
       -f "filtered_reads.csv" \
       --aligner bwa-mem2
     touch "${filter_breadcrumb}"
-    set -e
+    set +e
   fi
 
   if [ "${sparse_mode}" == "sparse" ]; then
@@ -81,7 +81,7 @@ pipeline_single_sample() {
   else
     echo "[! - ${out_subdir} | ${sparse_mode}] Running inference for ${sample_id}."
     expected_filter_file="${outdir}/filtered/filtered_reads.csv"
-    set +e  # terminate on error.
+    set -e  # terminate on error.
     if [ "${is_sparse}" == "True" ]; then
       env \
         CHRONOSTRAIN_DB_JSON="${database_json}" \
@@ -132,7 +132,7 @@ pipeline_single_sample() {
         --without-zeros  # Dense mode
     fi
     touch "${inference_breadcrumb}"
-    set -e
+    set +e
   fi
 }
 export pipeline_single_sample

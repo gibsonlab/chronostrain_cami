@@ -31,7 +31,7 @@ run_mgems_gold_standard() {
   aln1="${outdir}/aln_1.aln"
   aln2="${outdir}/aln_2.aln"
 
-  set +e
+  set -e
   mkdir -p "${tmpdir}"
   echo "[* Themisto - gold-standard-only] Aligning reads."
   aln_and_compress "$fq1" "$fq2" "$aln1" "$aln2" "$tmpdir" "${MGEMS_GOLD_STANDARD_ONLY_REF_DIR}/${MGEMS_GOLD_STANDARD_ONLY_REF_INDEX}" "${MGEMS_GOLD_STANDARD_ONLY_N_COLORS}"
@@ -46,7 +46,7 @@ run_mgems_gold_standard() {
     --verbose
 
   echo "[*] Cleaning up."
-  set -e
+  set +e
   rm -rf "${tmpdir}"
   touch "${run_breadcrumb}"
 }
