@@ -26,6 +26,7 @@ export CHRONOSTRAIN_REF_ONLY_CLUSTERS="/mnt/e/ecoli_db/chronostrain_files/ecoli.
 
 # ========= Chronostrain settings
 export CHRONOSTRAIN_CACHE_DIR="${DATA_DIR}/inference/cache/chronostrain"
+export CHRONOSTRAIN_ADHOC_THREHSOLD=0.9999
 export DEFAULT_T=1000.0
 export CHRONOSTRAIN_NUM_ITERS=100
 export CHRONOSTRAIN_NUM_SAMPLES=100
