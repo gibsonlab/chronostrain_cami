@@ -17,6 +17,13 @@ for i in $(seq 0 99); do
   pipeline_single_sample "${i}" "${out_subdir}" "${db_dir}" "${database_json}" "${cluster_file}" "dense"
 #  pipeline_single_sample "${i}" "${out_subdir}" "${db_dir}" "${database_json}" "${cluster_file}" "sparse"
 
+  # E. coli (Paper version.)
+  out_subdir="chronostrain_ecoli_paper_gold_standard_only"
+  db_dir="${CHRONOSTRAIN_ECOLI_PAPER_DB_DIR}"
+  database_json="${CHRONOSTRAIN_ECOLI_PAPER_GOLD_STANDARD_JSON}"
+  cluster_file="${CHRONOSTRAIN_ECOLI_PAPER_GOLD_STANDARD_CLUSTERS}"
+  pipeline_single_sample "${i}" "${out_subdir}" "${db_dir}" "${database_json}" "${cluster_file}" "dense"
+
   # S. aureus
   out_subdir="chronostrain_saureus_gold_standard_only"
   db_dir="${CHRONOSTRAIN_SAUREUS_DB_DIR}"
