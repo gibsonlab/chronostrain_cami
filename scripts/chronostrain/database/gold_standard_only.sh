@@ -13,6 +13,7 @@ create_from_seeds() {
 
   echo "[!] Starting database creation routine for ${taxa_name}."
 
+  # Unpack marker seeds from tarball archive, if it hasn't already been.
   marker_seed_index="${MISC_DATA_DIR}/chronostrain_seeds/${taxa_name}/marker_seed_index.tsv"
   if [ ! -f "${marker_seed_index}" ]; then
     echo "[!] Extracting marker seeds from archive."
@@ -22,7 +23,6 @@ create_from_seeds() {
     echo "[! Error] Archive did not contain marker seed index for taxa ${taxa_name}."
     exit 1
   fi
-
 
   # Reference Genome/Isolate BLAST database
   blast_db_dir="${db_dir}/blast_db"  # The location of the Blast DB that you wish to create using RefSeq indices (they will be downloaded by this notebook).
