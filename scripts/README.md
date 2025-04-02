@@ -6,6 +6,12 @@ benchmaking section of the paper "Longitudinal profiling of low-abundance strain
 
 # Instructions
 
+Prior to running anything, first set the desired data directories in `settings_global.sh`:
+```
+...
+export DATA_DIR="<your_empty_data_dir>"
+```
+
 All scripts are meant to be run from this (scripts/) directory.
 Example:
 ```bash
