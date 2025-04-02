@@ -1,3 +1,9 @@
+# Contents of this codebase
+This codebase contains bash scripts which implement the CAMI strain-madness analysis pipeline found in the 
+benchmaking section of the paper "Longitudinal profiling of low-abundance strains in microbiomes with ChronoStrain".
+(https://doi.org/10.1038/s41564-025-01983-z)
+
+
 # Instructions
 
 All scripts are meant to be run from this (scripts/) directory.
