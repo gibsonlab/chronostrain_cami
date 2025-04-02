@@ -6,6 +6,10 @@ export GOLD_STANDARD_DIR=${DATA_DIR}/gold_standard_genomes
 export GOLD_STANDARD_GZ=${GOLD_STANDARD_DIR}/archives/strmgCAMI2_genomes.tar.gz
 export GOLD_STANDARD_INDEX="${GOLD_STANDARD_DIR}/index.tsv"
 
+# TODO: add download scripts for these indices.
+export ECOLI_NCBI_INDEX="/home/youn/work/chronostrain_cami/data/ncbi_ecoli.tsv"
+
+# TODO: check whether these should be moved into chronostrain-specific setting.
 export CHRONOSTRAIN_INI="chronostrain/chronostrain.ini"
 export CHRONOSTRAIN_LOG_INI="chronostrain/logging.ini"
 

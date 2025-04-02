@@ -12,7 +12,9 @@ class MGEMSFlatInferenceResult:
 
     def to_profile(
             self,
-            strain_id_ordering: List[str]
+            strain_id_ordering: List[str],
+            mgems_abund_lb: float,
+            renormalize: bool = False
     ):
         predictions = np.empty(shape=(len(strain_id_ordering),), dtype=float)
         for tgt_idx, tgt_strain in enumerate(strain_id_ordering):
@@ -22,9 +24,15 @@ class MGEMSFlatInferenceResult:
             elif strain_hit_rows.shape[0] == 0:
                 raise ValueError(f"Unable to locate strain ID {tgt_strain} in mSWEEP output dataframe.")
             else:
-                predictions[tgt_idx] = strain_hit_rows.head(1).item()
+                pred_value = strain_hit_rows.head(1).item()
+                if pred_value > mgems_abund_lb:
+                    predictions[tgt_idx] = pred_value
+                else:
+                    predictions[tgt_idx] = 0.0
+        if renormalize:
+            predictions = predictions / np.sum(predictions)
         return StrainAbundanceProfile(
-            abundance_ratios=predictions / np.sum(predictions, axis=-1, keepdims=True),
+            abundance_ratios=predictions,
             strain_ids=strain_id_ordering
         )
 

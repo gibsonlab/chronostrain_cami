@@ -3,11 +3,11 @@ source settings_global.sh
 source strainge/settings.sh
 set -e
 
-kmer_dir="${STRAINGE_DB_DIR}/kmers"
-mkdir -p "${kmer_dir}"
-
 strainge_gold_standard_listing="${STRAINGE_DB_DIR}/gold_standard_references.txt"
 > "${strainge_gold_standard_listing}"
+
+kmer_dir="${STRAINGE_DB_DIR}/gold_standard_kmers"
+mkdir -p "${kmer_dir}"
 
 for fasta_path in ${GOLD_STANDARD_DIR}/sequences/*.fasta.gz; do
   fasta_file=$(basename "${fasta_path}")
@@ -23,5 +23,5 @@ for fasta_path in ${GOLD_STANDARD_DIR}/sequences/*.fasta.gz; do
   echo "${kmer_file}" >> "${strainge_gold_standard_listing}"
 done
 
-echo "[!] Creating pan-genome kmer database filed."
+echo "[!] Creating pan-genome kmer database files."
 straingst createdb -o "${STRAINGE_GOLD_STANDARD_ONLY_DB}" -f "${strainge_gold_standard_listing}"

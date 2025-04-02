@@ -43,7 +43,6 @@ def filter_profiles(profile_path: Path) -> Iterator[Tuple[str, pd.DataFrame]]:
         sample_id_line = profile_text[0]
         prefix = '@SampleID:'
         assert sample_id_line.startswith(prefix)
-
         sample_tag = sample_id_line[len(prefix):]
         sample_prefix = "strmgCAMI2_short_read_sample_"
         if sample_tag.startswith(sample_prefix):
@@ -77,7 +76,7 @@ def parse_profile_into_dataframe(profile_text: List[str]) -> pd.DataFrame:
     return pd.DataFrame(df_entries)
 
 
-def renormalize_profile(profile_df: pd.DataFrame, restrict_species: SpeciesLabel) -> StrainAbundanceProfile:
+def restrict_profile(profile_df: pd.DataFrame, restrict_species: SpeciesLabel, renormalize: bool = False) -> StrainAbundanceProfile:
     target_str = rf"\|{restrict_species.genus} {restrict_species.species}\|"
     
     strain_df = profile_df.loc[profile_df['Rank'] == 'strain']
@@ -85,8 +84,12 @@ def renormalize_profile(profile_df: pd.DataFrame, restrict_species: SpeciesLabel
     
     strain_ids = list(strain_slice['CAMI_Genome'])  # the gold-standard IDs.
     abundances = strain_slice['Percentage'].to_numpy() / 100.0
+    overall_total_abund = np.sum(abundances)
+
+    if renormalize:
+        abundances = abundances / np.sum(abundances)
 
     return StrainAbundanceProfile(
-        abundance_ratios=abundances / np.sum(abundances),
+        abundance_ratios=abundances,
         strain_ids=strain_ids
-    )
+    ), overall_total_abund

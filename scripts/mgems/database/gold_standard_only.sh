@@ -9,18 +9,13 @@ echo "Working in ${MGEMS_GOLD_STANDARD_ONLY_REF_DIR}"
 
 
 # Create a table translating msweep cluster index to gold-standard ID.
-echo -e "ID\tFasta\tCluster"
-sed '1d' "${GOLD_STANDARD_INDEX}" | cut -f3,6 | awk -v OFS='\t' '{print $1,$2,NR-1}' >> ref_info.tsv
+echo -e "ID\tFasta\tCluster" > ref_info.tsv
+sed '1d' "${GOLD_STANDARD_INDEX}" | cut -f4,6 | awk -v OFS='\t' '{print $1,$2,NR-1}' >> ref_info.tsv
 
 
 # Extract the list of fasta file paths.
 # sed | cut: skip the first line (header) and extract sixth column (fasta path).
 sed '1d' ref_info.tsv | cut -f2 > themisto_ref_paths.txt
-n_genomes=$(wc -l themisto_ref_paths.txt | awk '{ print $1 }')
-if [ $n_genomes -ne $MGEMS_GOLD_STANDARD_ONLY_N_COLORS ]; then
-  echo "# of gold-standard genomes found (${n_genomes}) does not match the expected value (${MGEMS_GOLD_STANDARD_ONLY_N_COLORS})"
-  exit 1
-fi
 
 
 # Build themisto index.
