@@ -1,4 +1,3 @@
-# These databases use Ecoli markers (TODO: refactor these variable names to specify this)
 export CHRONOSTRAIN_DB_BASEDIR="${DATA_DIR}/inference/databases/chronostrain"
 
 # ============ BEGIN: GOLD ONLY DB

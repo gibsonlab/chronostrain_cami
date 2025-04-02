@@ -18,7 +18,7 @@ class StrainAbundanceProfile(object):
 
     def extend(self, extended_strain_ids: List[str]) -> 'StrainAbundanceProfile':
         assert set(self.strain_ids).issubset(set(extended_strain_ids))
-        assert len(self.abundance_ratios.shape) == 1  # TODO: remove this assumption
+        assert len(self.abundance_ratios.shape) == 1
         extended_abundances = np.zeros(
             shape=len(extended_strain_ids),
             dtype=self.abundance_ratios.dtype
